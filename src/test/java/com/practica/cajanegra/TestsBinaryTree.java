@@ -23,6 +23,7 @@ import com.binarytree.BinaryTree;
 import com.binarytree.Node;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.util.Iterator;
 
 public class TestsBinaryTree {
     @Test
@@ -131,5 +132,127 @@ public class TestsBinaryTree {
         /*
         La función cumple su funcionalidad
          */
+    }
+    @Test
+    public void searchTest() {
+
+        /*
+        Clases aceptables -> Contenido que existe en en árbol
+        Clases no aceptables -> Contenido que no existe en el árbol
+         */
+
+        BinaryTree testTree = new BinaryTree("1");
+
+        //Se busca un contenido que exista en el árbol
+        Assertions.assertEquals("1", testTree.search("1").getContent().toString()); // Pasa el test
+
+        //Se busca un contenido que no exista en el árbol
+        Assertions.assertNull(testTree.search("2")); // Pasa el test
+    }
+
+    @Test
+    public void removeTest() {
+
+        /*
+        Clases aceptables -> Borrar contenido que existe en el árbol
+        Clases no aceptables -> Borrar contenido que no existe en el árbol
+         */
+
+        BinaryTree testTree = new BinaryTree("1");
+        Node node1 = new Node("2");
+
+        // Insertamos el nodo en el árbol
+        testTree.insert(node1.getContent(), testTree.getRoot(), true);
+        Assertions.assertNotNull(testTree.search("2")); //Pasa el test
+
+        //Borramos el nodo del árbol
+        testTree.remove(node1);
+        Assertions.assertNull(testTree.search("2")); //No pasa el test
+
+        /*
+        Esta función no cumple su funcionalidad
+         */
+    }
+
+    @Test
+    public void equalsTest() {
+
+        /*
+        Clases aceptables -> Comparar árbol con árbol
+        Clases no aceptables -> Comparar árbol con valor nulo
+         */
+
+        BinaryTree testTree1 = new BinaryTree("1");
+        Node node1 = new Node("2");
+
+        //Comparamos el árbol a uno nulo
+        //Assertions.assertFalse(testTree1.equals(null)); //no pasa el test ya que no acepta valor nulo
+
+        //Creamos un nuevo árbol e insertamos el node1 al primer árbol para comparar árboles diferentes
+        testTree1.insert(node1.getContent(), testTree1.getRoot(),false);
+        BinaryTree testTree2 = new BinaryTree("1");
+        //Assertions.assertFalse(testTree1.equals(testTree2)); //no pasa el test
+
+        //Añadimos el nodo al segundo árbol para que sean iguales
+        testTree2.insert(node1.getContent(), testTree2.getRoot(), false);
+        Assertions.assertTrue(testTree1.equals(testTree2)); //Pasa el test
+
+        /*
+        La función no cumple su funcionalidad
+         */
+    }
+
+    @Test
+    public void toListTest() {
+
+        /*
+        Clases aceptables -> árbol de uno solo nodo,
+                             árbol que acaba en un nodo izquierdo,
+                             árbol que acaba en un nodo derecho,
+                             árbol que acaba con nodos en ambos lados
+        Clases no aceptables -> árbol nulo (no es comprobable ya que no se puede instanciar un árbol sin nodos)
+         */
+
+        BinaryTree testTree = new BinaryTree("1");
+        Node node1 = new Node("2");
+        Node node2 = new Node("3");
+
+        Assertions.assertEquals("[1]",testTree.toList().toString()); // Pasa el test
+
+        //Insertamos un nodo a la izqquierda
+        testTree.insert(node1.getContent(),testTree.getRoot(),true);
+        Assertions.assertEquals("[1, 2]",testTree.toList().toString()); // Pasa el test
+
+        //Creamos un nuevo árbol e insertamos el nodo 2 a la derecha
+        BinaryTree testTree2 = new BinaryTree("1");
+        testTree2.insert(node2.getContent(), testTree2.getRoot(), false);
+        Assertions.assertEquals("[1, 3]", testTree2.toList().toString()); // Pasa el test
+
+        //Insertamos el nodo 2 al primer árbol
+        testTree.insert(node2.getContent(),testTree.getRoot(), false);
+        Assertions.assertEquals("[1, 2, 3]", testTree.toList().toString()); // Pasa el test
+
+        /*
+        La funcion cumple su funcionalidad
+         */
+    }
+
+    @Test
+    public void getSubTreeTest() {
+
+        /*
+        Clases aceptables -> árbol con un nodo,
+                             árbol que acaba en un nodo izquierdo,
+                             árbol que acaba en un nodo derecho,
+                             árbol que acaba en nodo en ambas posiciones.
+        Clases no aceptables -> valor nulo
+         */
+
+        BinaryTree testTree = new BinaryTree("1");
+        Node node1 = new Node("2");
+        Node node2 = new Node("3");
+
+        BinaryTree subTree1 = testTree.getSubTree(testTree.getRoot());
+
     }
 }
