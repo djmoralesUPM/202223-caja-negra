@@ -24,6 +24,7 @@ import com.binarytree.Node;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Iterator;
+import org.junit.jupiter.api.function.Executable;
 
 public class TestsBinaryTree {
     @Test
@@ -248,11 +249,69 @@ public class TestsBinaryTree {
         Clases no aceptables -> valor nulo
          */
 
-        BinaryTree testTree = new BinaryTree("1");
+        BinaryTree testTree1 = new BinaryTree("1");
         Node node1 = new Node("2");
         Node node2 = new Node("3");
 
-        BinaryTree subTree1 = testTree.getSubTree(testTree.getRoot());
+        //Probamos creando un subárbol desde la raiz
+        BinaryTree subTree1 = testTree1.getSubTree(testTree1.getRoot());
+        Assertions.assertEquals("1",subTree1.getRoot().getContent().toString()); // Pasa el test
+
+        //Probamos a añadir un nodo a la izquierda y crear un subárbol desde dicho nodo
+        testTree1.insert(node1.getContent(), testTree1.getRoot(), true);
+        Assertions.assertEquals("2",testTree1.getSubTree(node1).getRoot().getContent().toString()); // Pasa el test
+
+        //Creamos otro árbol y añadimos el nodo a la derecha y creamos un subárbol desde dicho nodo
+        BinaryTree testTree2 = new BinaryTree("1");
+        testTree2.insert(node2.getContent(),testTree2.getRoot(),false);
+        Assertions.assertEquals("3",testTree2.getSubTree(node2).getRoot().getContent().toString()); // Pasa el test
+
+        //Añadimos otro nodo a la izquierda y creamos un subárbol que acaba en derecha e izquierda
+        testTree2.insert(node1.getContent(),testTree2.getRoot(),true);
+        Assertions.assertEquals("[1, 2, 3]", testTree2.getSubTree(testTree2.getRoot()).toList().toString()); // Pasa el test
+
+        /*
+        Esta función cumple su funcionalidad
+         */
+
+    }
+
+    @Test
+    public void depthTest() {
+
+        /*
+        Clases aceptables -> Árbol con un solo nodo,
+                             árbol con dos o más nodos,
+                             desde un nodo que se encuentra en el árbol.
+        Clases no aceptables -> Desde nodo que no se encuentra en el árbol.
+         */
+
+        BinaryTree testTree = new BinaryTree("1");
+
+        //Probamos con un árbol de un solo nodo
+        Assertions.assertEquals(1,testTree.depth()); // No pasa el test
+
+        //Insertamos Nodos
+        Node node1 = testTree.insert("2",testTree.getRoot(),false);
+        Node node2 = testTree.insert("3",testTree.getRoot(),true);
+        testTree.insert("4",node1,false);
+        testTree.insert("5",node1,true);
+        testTree.insert("6",node2,false);
+        testTree.insert("7",node2,true);
+
+        //Comprobamos la profundidad desde la raiz
+        Assertions.assertEquals(3,testTree.depth()); //No pasa el test
+
+        //Comprobamos la profundidad desde un nodo intermedio
+        Assertions.assertEquals(2,testTree.depth(testTree.search(node1.getContent()))); //No pasa el test
+
+        //Comprobamos la profundiad desde un nodo que no existe
+        Node node3 = new Node("8");
+        Assertions.assertNull(testTree.getSubTree(node3)); //Produce una excepción
+
+        /*
+        Esta función no cumple con su funcionalidad
+         */
 
     }
 }
